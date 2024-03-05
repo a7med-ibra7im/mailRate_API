@@ -6,9 +6,27 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Meal(models.Model):
     title = models.CharField(max_length=32)
     description = models.TextField(max_length=360)
+    
+    def no_of_ratings(self):
+        rating=Rating.objects.filter(meal=self)
+        return len(rating)
+        
+    def avg_rating(self):
+        rating=Rating.objects.filter(meal=self)
+        sum=0
+        
+        for x in rating:
+            sum += x.stars
+        if len(rating) > 0 :
+            return sum/len(rating)
+        else:
+            return 0
+    
 
     def __str__(self):
         return self.title
+    
+    
 
 
 class Rating(models.Model):
